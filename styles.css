@@ -1060,3 +1060,14 @@ html[data-theme] .tip.is-sheet {
   html[data-theme] .slot { min-height: 0; }
 }
 @media (max-width: 640px) { html[data-theme='retro'] .list-name { flex-basis: auto; } }
+
+/* Narrow phones: keep brand, currency and theme toggle on one line without overflowing */
+.topbar { gap: 12px; }
+@media (max-width: 480px) {
+  html[data-theme] .top-actions { gap: 6px; flex-shrink: 0; }
+  html[data-theme='retro'] .brand { font-size: 24px; gap: 8px; }
+  html[data-theme='classic'] .brand { font-size: 1.4em; }
+  html[data-theme='retro'] .theme-btn { padding: 8px 10px; }
+  html[data-theme='retro'] #themeLabel { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  html[data-theme='retro'] .currency-btn select { padding-left: 10px; padding-right: 26px; }
+}

@@ -4,6 +4,14 @@ A static, no-build web app for planning a PC part list. Pick a motherboard, CPU,
 
 **Live:** https://rigsmith-pc-builder.netlify.app
 
+## Screenshots
+
+| Retro theme | Classic theme |
+|---|---|
+| ![Rigsmith in the Retro theme with a complete 1440p gaming build](docs/screenshots/desktop-retro.png) | ![Rigsmith in the Classic theme with the same build](docs/screenshots/desktop-classic.png) |
+
+<p align="center"><img src="docs/screenshots/mobile-retro.png" alt="Rigsmith on a phone-width screen" width="300"></p>
+
 ## Features
 
 - **Compatibility checks** — socket, memory type and capacity, M.2 generation, PSU wattage and headroom, CPU/GPU bottlenecks.
@@ -24,6 +32,7 @@ catalog.json                catalog manifest: metadata, counts, hashed data file
 data/<cat>.<hash>.json      one compact part list per category, loaded lazily
 scripts/build-catalog.mjs   regenerates catalog.json and data/ from the source datasets
 netlify.toml                Netlify publish and cache-header config
+docs/screenshots/           README images
 ```
 
 ## Running locally
@@ -55,9 +64,13 @@ The site is hosted on Netlify and publishes the repository root as-is:
 netlify deploy --prod --dir .
 ```
 
-## Data and licenses
+## License
 
-- Specs: [BuildCores OpenDB](https://github.com/buildcores/buildcores-open-db) — CC BY-NC-SA 4.0
-- Prices: [docyx/pc-part-dataset](https://github.com/docyx/pc-part-dataset) — MIT
+The **code** in this repository (`index.html`, `app.js`, `styles.css`, `scripts/`) is released under the [MIT License](LICENSE).
+
+The **part data** in `catalog.json` and `data/*.json` is derived from third-party datasets and keeps their licenses — the MIT license does not apply to it:
+
+- Specs: [BuildCores OpenDB](https://github.com/buildcores/buildcores-open-db) — [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). Because the specs are share-alike and non-commercial, the generated data files are also distributed under CC BY-NC-SA 4.0 and may not be used commercially.
+- Prices: [docyx/pc-part-dataset](https://github.com/docyx/pc-part-dataset) — MIT.
 
 Prices, utilization and FPS figures are estimates for planning, not quotes or benchmarks.
