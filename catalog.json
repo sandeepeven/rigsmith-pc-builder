@@ -1,0 +1,36 @@
+{
+ "built": "2026-11-09",
+ "usdInr": 88,
+ "indiaFactor": 1.18,
+ "sources": [
+  {
+   "name": "BuildCores OpenDB",
+   "url": "https://github.com/buildcores/buildcores-open-db",
+   "license": "CC BY-NC-SA 4.0",
+   "use": "specs"
+  },
+  {
+   "name": "docyx/pc-part-dataset",
+   "url": "https://github.com/docyx/pc-part-dataset",
+   "license": "MIT",
+   "use": "prices (USD, PCPartPicker)"
+  }
+ ],
+ "total": 11211,
+ "counts": {
+  "mobo": 1595,
+  "cpu": 103,
+  "gpu": 2077,
+  "ram": 2414,
+  "ssd": 2033,
+  "psu": 2989
+ },
+ "files": {
+  "mobo": "data/mobo.f9f122f7d0.json",
+  "cpu": "data/cpu.2436d838ea.json",
+  "gpu": "data/gpu.bc1e4de689.json",
+  "ram": "data/ram.70a462d632.json",
+  "ssd": "data/ssd.7e0e895d19.json",
+  "psu": "data/psu.c4ddeb33a2.json"
+ }
+}

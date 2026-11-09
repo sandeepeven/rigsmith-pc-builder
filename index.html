@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en" data-theme="classic">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rigsmith — PC Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Roboto+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='3' y='3' width='26' height='26' rx='5' fill='%23ffe17c' stroke='%23171e19' stroke-width='2.5'/%3E%3Crect x='10' y='10' width='12' height='12' rx='2' fill='%23171e19'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preload" href="catalog.json" as="fetch" crossorigin="anonymous" />
+  <meta name="description" content="Build a PC part list with compatibility checks, utilization estimates, game FPS estimates and approximate Indian prices." />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span id="brandText">Rigsmith</span></div>
+    <div class="top-actions">
+    <label class="currency-btn"><span class="sr-only">Currency</span>
+      <select id="currencySel" aria-label="Currency">
+        <option value="INR">₹ INR</option>
+        <option value="USD">$ USD</option>
+        <option value="EUR">€ EUR</option>
+        <option value="GBP">£ GBP</option>
+        <option value="CAD">$ CAD</option>
+        <option value="AUD">$ AUD</option>
+        <option value="AED">AED</option>
+        <option value="SGD">$ SGD</option>
+        <option value="JPY">¥ JPY</option>
+      </select>
+    </label>
+    <button class="theme-btn" id="themeBtn" aria-pressed="false"><span class="theme-ico" aria-hidden="true"></span><span id="themeLabel">Retro mode</span></button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="builder" aria-label="Build list">
+      <nav class="tabs" id="tabs" role="tablist" aria-label="Saved lists"></nav>
+
+      <div class="list-head">
+        <input class="list-name" id="listName" aria-label="List name" maxlength="40" spellcheck="false" />
+        <div class="list-actions">
+          <button class="ghost" id="clearList">Clear</button>
+          <button class="ghost danger" id="deleteList">Delete list</button>
+        </div>
+      </div>
+      <p class="lede">Fill each slot. Start with a <em>motherboard</em> or <em>CPU</em> and every other slot will suggest the most compatible parts.<span class="touch-only"> Press and hold any part to see its details.</span></p>
+
+      <div class="slots" id="slots"></div>
+
+      <div class="card games-card" id="games">
+        <div class="card-head"><h2>Games you can play</h2><div class="res-tabs" id="resTabs" role="group" aria-label="Resolution"></div></div>
+        <p class="games-summary" id="gamesSummary"></p>
+        <p class="games-list" id="gamesList"></p>
+        <p class="games-note">Estimated average FPS at the High preset, native resolution, no upscaling or frame generation. Based on typical review results for the GPU and CPU; real numbers vary with drivers, patches and scenes.</p>
+      </div>
+    </section>
+
+    <aside class="side" id="summary" aria-label="Build summary">
+      <div class="card">
+        <div class="card-head">
+          <h2>Compatibility</h2>
+          <span class="score" id="meterScore">—</span>
+        </div>
+        <p class="status" id="meterStatus">Awaiting parts</p>
+        <div class="meter" id="meter" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Compatibility meter">
+          <div class="meter-fill" id="meterFill"></div>
+        </div>
+        <p class="meter-pct" id="meterPct">Setup 0% complete</p>
+        <ul class="issues" id="issues"></ul>
+      </div>
+
+      <div class="card util-card" id="utilCard">
+        <div class="card-head"><h2>Utilization</h2><span class="score" id="utilScore">—</span></div>
+        <p class="util-intro">How much of each major part the rest of this build can actually put to work.</p>
+        <ul class="util" id="util"></ul>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Parts</h2><span class="note" id="priceNote">Prices in INR, approx.</span></div>
+        <table class="parts">
+          <thead><tr><th scope="col">Component</th><th scope="col">Item</th><th scope="col" class="t-price">Price</th></tr></thead>
+          <tbody id="partsBody"></tbody>
+          <tfoot><tr><th scope="row" colspan="2">Total</th><td class="t-price" id="partsTotal">₹0</td></tr></tfoot>
+        </table>
+        <p class="parts-saved" id="partsSaved"></p>
+        <p class="power" id="power"></p>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="credits">
+    <p>Specs from <a href="https://github.com/buildcores/buildcores-open-db" target="_blank" rel="noopener">BuildCores OpenDB</a> (CC BY-NC-SA 4.0).
+      Prices from <a href="https://github.com/docyx/pc-part-dataset" target="_blank" rel="noopener">docyx/pc-part-dataset</a> (MIT), US listings converted to approximate INR.
+      <span id="catalogInfo"></span></p>
+  </footer>
+
+  <div class="picker" id="picker" hidden>
+    <div class="picker-backdrop" data-close></div>
+    <div class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
+      <div class="picker-head">
+        <h2 id="pickerTitle">Choose</h2>
+        <button class="icon-btn" data-close aria-label="Close">×</button>
+      </div>
+      <input class="search" id="pickerSearch" type="search" autocomplete="off" />
+      <p class="picker-hint" id="pickerHint"></p>
+      <div class="picker-list" id="pickerList"></div>
+    </div>
+  </div>
+
+  <div class="mbar" id="mbar" role="region" aria-label="Build total">
+    <div class="mbar-inner">
+      <div class="mbar-progress">
+        <span class="mbar-meter" id="mbarMeter"><span class="mbar-fill" id="mbarFill"></span></span>
+        <span class="mbar-text"><span id="mbarPct">0% complete</span><span class="mbar-sep">·</span><span id="mbarScore">no parts yet</span><span class="mbar-extra"><span class="mbar-sep">·</span><span id="mbarUtil">utilization —</span></span></span>
+      </div>
+      <div class="mbar-prices" id="mbarPrices" aria-label="Price per component"></div>
+      <a class="mbar-link" href="#summary">Summary ↓</a>
+      <div class="mbar-totalbox"><span class="mbar-label">Total</span><strong class="mbar-total" id="mbarTotal">₹0</strong></div>
+    </div>
+  </div>
+
+  <div class="tip" id="tip" hidden role="tooltip"></div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
