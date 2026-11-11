@@ -114,7 +114,8 @@ function buildCPUs() {
       cores: c.cores?.total, threads: c.cores?.threads,
       base: c.clocks?.performance?.base, boost: c.clocks?.performance?.boost,
       tdp: s.tdp, mem: s.memory?.types?.filter((t) => /DDR[45]/.test(t)) ?? [],
-      igpu: Boolean(s.integratedGraphics?.model), cooler: Boolean(s.includesCooler),
+      igpu: !/^(none)?$/i.test(s.integratedGraphics?.model ?? ''), // source writes the string 'None'
+      cooler: Boolean(s.includesCooler),
       year: c.metadata?.releaseYear,
       tier: cpuTier(key), price: toINR(median(pr.map((x) => x.price))), priceSrc: 'listed',
     });
