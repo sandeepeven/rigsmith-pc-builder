@@ -513,10 +513,10 @@
     $('#partsBody').innerHTML = CATS.map((c) => {
       const p = b[c.key];
       if (ex[c.key]) {
-        return `<tr class="is-excluded" data-cat="${c.key}"${p ? ` data-tip="${p.id}"` : ''}><th scope="row">${c.label}</th><td class="t-name">${p ? esc(p.name) : 'Already have one'}</td><td class="t-price">${p ? `<s>${money(p.price)}</s> ` : ''}<span class="owned-tag">Owned</span></td></tr>`;
+        return `<tr class="is-excluded" data-cat="${c.key}"><th scope="row">${c.label}</th><td class="t-name">${p ? esc(p.name) : 'Already have one'}</td><td class="t-price">${p ? `<s>${money(p.price)}</s> ` : ''}<span class="owned-tag">Owned</span></td></tr>`;
       }
       return p
-        ? `<tr data-tip="${p.id}" data-cat="${c.key}"><th scope="row">${c.label}</th><td class="t-name">${esc(p.name)}</td><td class="t-price">${money(p.price)}</td></tr>`
+        ? `<tr data-cat="${c.key}"><th scope="row">${c.label}</th><td class="t-name">${esc(p.name)}</td><td class="t-price">${money(p.price)}</td></tr>`
         : `<tr class="is-empty" data-cat="${c.key}"><th scope="row">${c.label}</th><td class="t-name">—</td><td class="t-price">—</td></tr>`;
     }).join('');
     $('#partsSaved').textContent = saved ? `Not included (already owned): ${money(saved)}` : '';
@@ -531,7 +531,7 @@
     $('#utilScore').textContent = avg == null ? '—' : `${avg}% avg`;
     $('#mbarUtil').textContent = avg == null ? 'utilization —' : `utilization ${avg}% avg`;
     $('#util').innerHTML = util.length ? util.map((x) => `
-      <li class="util-row" data-cat="${x.key}" data-tip="${x.part.id}">
+      <li class="util-row" data-cat="${x.key}">
         <div class="util-top"><span class="util-label">${CAT[x.key].label}</span><span class="util-name">${esc(shortName(x.part))}</span><span class="util-pct">${x.pct}%</span></div>
         <div class="util-bar" style="--hue:${uhue(x.pct)}"><span style="width:${x.pct}%"></span></div>
         ${x.sub ? `<div class="util-sub">${x.sub.label}: ~${x.sub.used} of ${x.sub.total} ${x.sub.unit} used</div>` : ''}
